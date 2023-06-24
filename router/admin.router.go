@@ -28,4 +28,7 @@ func admin(route fiber.Router) {
 	device.Put(":id", handler.UpdateDevice)
 	device.Delete(":id", handler.DeleteDevice)
 
+	order := base.Group("/order", middleware.AuthAdmin)
+	order.Get("", handler.GetAllOrderAdmin)
+	order.Put("", handler.UpdateOrderStatusAdmin)
 }

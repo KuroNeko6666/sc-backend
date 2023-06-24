@@ -10,7 +10,7 @@ import (
 type Order struct {
 	ID        string   `json:"id" gorm:"primaryKey"`
 	UserID    string   `json:"user_id" gorm:"size:191"`
-	Items     []Device `json:"items" gorm:"foreignKey:DeviceID"`
+	Items     []Device `json:"items" gorm:"many2many:order_devices"`
 	Status    string   `json:"status"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
