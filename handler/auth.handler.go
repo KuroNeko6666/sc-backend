@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"time"
 
 	"github.com/KuroNeko6666/sc-backend/config"
@@ -83,6 +84,8 @@ func RegisterUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&form); err != nil {
 		return BadRequestData(c, err.Error())
 	}
+
+	log.Println(&form)
 
 	if err := helper.GenerateHash(&form.Password); err != nil {
 		return InternalServerData(c, err.Error())
