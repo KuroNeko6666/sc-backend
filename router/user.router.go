@@ -26,4 +26,15 @@ func user(route fiber.Router) {
 	dashboard.Get("/device-speed/:id", handler.ChartDeviceSpeed)
 	dashboard.Get("/device-total", handler.DahsboardTotal)
 
+	device.Get(":id", handler.FindDeviceDataFromUser)
+
+	cart := base.Group("/cart", middleware.AuthUser)
+	cart.Get("", handler.UserGetItemCart)
+	cart.Post("/add-item", handler.UserAddItemToCart)
+	cart.Delete("/remove-item", handler.RemoveUserFromDevice)
+
+	order := base.Group("/order", middleware.AuthUser)
+	order.Get("", handler.UserGetItemOrder)
+	order.Post("/create-transaction", handler.UserCreateOrder)
+	// order.Post("/update-transaction", handler.UserCreateOrder)
 }

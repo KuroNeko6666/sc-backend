@@ -23,3 +23,12 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ID = uuid.NewString()
 	return
 }
+
+func (u *User) AfterCreate(tx *gorm.DB) (err error) {
+	var cart Cart
+	cart.UserID = u.ID
+	if err = tx.Model(&cart).Create(&cart).Error; err != nil {
+		return err
+	}
+	return nil
+}
