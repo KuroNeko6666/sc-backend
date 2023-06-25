@@ -28,7 +28,9 @@ func UserAddItemToCart(c *fiber.Ctx) error {
 	deviceId := c.Query("device_id")
 	userId := c.Query("user_id")
 
-	if err := database.Client.Model(&device).Preload("Address").Preload("Users").Preload("Data").Where("id = ?", deviceId).First(&device).Error; err != nil {
+	if err := database.Client.Model(&device).
+		Preload("Address").Preload("Users").Preload("Data").
+		Where("id = ?", deviceId).First(&device).Error; err != nil {
 		return InternalServerData(c, err.Error())
 	}
 	if err := database.Client.Model(&cart).Where("user_id = ?", userId).First(&cart).Error; err != nil {
@@ -52,7 +54,9 @@ func UserRemoveItemToCart(c *fiber.Ctx) error {
 
 	switch usage {
 	case "ONE":
-		if err := database.Client.Model(&device).Preload("Address").Preload("Users").Preload("Data").Where("id = ?", deviceId).Where("id = ?", deviceId).First(&device).Error; err != nil {
+		if err := database.Client.Model(&device).
+			Preload("Address").Preload("Users").Preload("Data").
+			Where("id = ?", deviceId).Where("id = ?", deviceId).First(&device).Error; err != nil {
 			return InternalServerData(c, err.Error())
 		}
 		if err := database.Client.Model(&cart).Where("user_id = ?", userId).First(&cart).Error; err != nil {

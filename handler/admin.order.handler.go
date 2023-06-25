@@ -81,10 +81,22 @@ func UpdateOrderStatusAdmin(c *fiber.Ctx) error {
 		return InternalServerData(c, err.Error())
 	}
 
-	if err := database.Client.Model(&order).
+	chain := database.Client.Model(&order).
 		Preload("Items").Preload("Items.Address").Preload("Items.Users").Preload("Items.Data").
-		Where("id = ?", orderId).Update("status", status).Error; err != nil {
+		Where("id = ?", orderId)
+	chain.First(&order) // binding data
+
+	if err := chain.Update("status", status).Error; err != nil {
 		return InternalServerData(c, err.Error())
+	}
+
+	if status == "accept" {
+		var user model.User
+		user.ID = order.UserID
+		device := order.Items
+		if err := database.Client.Debug().Model(&user).Association("Devices").Append(&device); err != nil {
+			return InternalServerData(c, err.Error())
+		}
 	}
 
 	return Success(c)
