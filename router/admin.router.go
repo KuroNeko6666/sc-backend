@@ -49,4 +49,9 @@ func admin(route fiber.Router) {
 	dashboard.Get("/user", handler.ChartUserCreated)
 	dashboard.Get("/admin", handler.ChartAdminCreated)
 
+	order := base.Group("/order")
+	order.Get("", handler.GetOrderList)
+	order.Get("/:id", handler.FindOrder)
+	order.Put("/:id", handler.OrderStatusChange)
+
 }

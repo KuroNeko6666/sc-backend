@@ -19,7 +19,7 @@ func RunApp() {
 		},
 		AllowCredentials: true,
 		AllowOrigins:     "*",
-		AllowHeaders:     "*",
+		AllowHeaders:     "*, content-type",
 		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS, PATCH",
 	}))
 	database.ConnectDB()

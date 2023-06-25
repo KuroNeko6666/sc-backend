@@ -98,7 +98,7 @@ func DeleteDevice(c *fiber.Ctx) error {
 		return InternalServerData(c, err.Error())
 	}
 
-	if err := database.Client.Model(&device).Delete(&device).Error; err != nil {
+	if err := database.Client.Model(&device).Omit("Users").Omit("Address").Delete(&device).Error; err != nil {
 		return InternalServerData(c, err.Error())
 	}
 
@@ -228,17 +228,41 @@ func GetDeviceForMarket(c *fiber.Ctx) error {
 
 	for _, device := range devices {
 		var res response.DevicesMarket
+		var cart model.Cart
+		var order model.Order
 
 		if err := copier.CopyWithOption(&res, &device, copier.Option{IgnoreEmpty: true}); err != nil {
 			return InternalServerData(c, err.Error())
 		}
 
 		res.Subcribers = database.Client.Model(&device).Association("Users").Count()
+
 		if count := database.Client.Model(&device).Where("id = ?", user.ID).Association("Users").Count(); count == 0 {
 			res.Subcribe = false
 		} else {
 			res.Subcribe = true
 		}
+
+		if err := database.Client.Model(&user).Association("Cart").Find(&cart); err != nil {
+			return InternalServerData(c, err.Error())
+		}
+
+		if count := database.Client.Model(&cart).Where("id = ?", device.ID).Association("Items").Count(); count == 0 {
+			res.Cart = false
+		} else {
+			res.Cart = true
+		}
+
+		if err := database.Client.Model(&user).Association("Order").Find(&order); err != nil {
+			return InternalServerData(c, err.Error())
+		}
+
+		if count := database.Client.Model(&order).Where("id = ?", device.ID).Association("Items").Count(); count == 0 {
+			res.Order = false
+		} else {
+			res.Order = true
+		}
+
 		data = append(data, res)
 	}
 

@@ -2,7 +2,7 @@ package config
 
 const (
 	ServerHost = "localhost"
-	ServerPort = ":8000"
+	ServerPort = ":8080"
 
 	ResFailure = "failure"
 	ResSuccess = "success"

@@ -28,6 +28,8 @@ func ConnectDB() {
 		&model.Device{},
 		&model.DeviceData{},
 		&model.DeviceAddress{},
+		&model.Cart{},
+		&model.Order{},
 	)
 
 	if err != nil {

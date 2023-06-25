@@ -21,6 +21,8 @@ type DevicesMarket struct {
 	Address    model.DeviceAddress `json:"address"`
 	Subcribers int64               `json:"subcribers"`
 	Subcribe   bool                `json:"subcribe"`
+	Cart       bool                `json:"cart"`
+	Order      bool                `json:"order"`
 	CreatedAt  time.Time           `json:"created_at"`
 	UpdatedAt  time.Time           `json:"updated_at"`
 }

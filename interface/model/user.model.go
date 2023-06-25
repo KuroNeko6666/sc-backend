@@ -15,6 +15,8 @@ type User struct {
 	Password  string   `json:"-"`
 	Status    bool     `json:"status"`
 	Devices   []Device `json:"devices" gorm:"many2many:user_devices"`
+	Cart      Cart     `json:"cart" gorm:"foreignKey:UserID"`
+	Order     []Order  `json:"order" gorm:"foreignKey:UserID"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
