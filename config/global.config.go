@@ -7,10 +7,10 @@ const (
 	ResFailure = "failure"
 	ResSuccess = "success"
 
-	DatabaseHost = "192.168.100.107"
+	DatabaseHost = "188.166.245.130"
 	DatabasePort = ":3306"
-	DatabaseUser = "mareca"
-	DatabasePass = "mareca"
+	DatabaseUser = "pub"
+	DatabasePass = "Aks3sdb!@#"
 	DatabaseName = "speed_control_database"
 
 	StorageHost = ""

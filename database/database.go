@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/KuroNeko6666/sc-backend/config"
-	"github.com/KuroNeko6666/sc-backend/interface/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -22,15 +21,15 @@ func ConnectDB() {
 		log.Fatal(err)
 	}
 
-	err = Client.AutoMigrate(
-		&model.User{},
-		&model.Admin{},
-		&model.Device{},
-		&model.DeviceData{},
-		&model.DeviceAddress{},
-		&model.Cart{},
-		&model.Order{},
-	)
+	// err = Client.AutoMigrate(
+	// 	&model.User{},
+	// 	&model.Admin{},
+	// 	&model.Device{},
+	// 	&model.DeviceData{},
+	// 	&model.DeviceAddress{},
+	// 	&model.Cart{},
+	// 	&model.Order{},
+	// )
 
 	if err != nil {
 		log.Fatal(err)
