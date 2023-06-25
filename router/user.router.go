@@ -19,5 +19,11 @@ func user(route fiber.Router) {
 	device.Get("/market", handler.GetDeviceForMarket)
 
 	device.Get("", handler.GetDeviceFromUser)
-	device.Get(":id", handler.FindDeviceDataFromUser)
+	device.Get(":id", handler.FindDevice)
+
+	dashboard := base.Group("/dashboard", middleware.AuthUser)
+	dashboard.Get("/device-data/:id", handler.ChartDeviceDataCreated)
+	dashboard.Get("/device-speed/:id", handler.ChartDeviceSpeed)
+	dashboard.Get("/device-total", handler.DahsboardTotal)
+
 }

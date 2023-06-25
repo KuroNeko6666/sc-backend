@@ -11,8 +11,8 @@ import (
 	"github.com/jinzhu/copier"
 )
 
-func GetUser(c *fiber.Ctx) error {
-	var list []model.User
+func GetAdmin(c *fiber.Ctx) error {
+	var list []model.Admin
 	var count int64
 
 	limit := c.QueryInt("limit", 10)
@@ -20,14 +20,14 @@ func GetUser(c *fiber.Ctx) error {
 	search := helper.SearchString(c.Query("search", ""))
 	offset := (page * limit) - limit
 
-	if err := database.Client.Model(&model.User{}).
+	if err := database.Client.Model(&model.Admin{}).
 		Limit(limit).Offset(offset).Where("name LIKE ?", search).
 		Or("username LIKE ?", search).Or("email LIKE ?", search).
 		Find(&list).Error; err != nil {
 		return InternalServerData(c, err.Error())
 	}
 
-	if err := database.Client.Model(&model.User{}).Count(&count).Error; err != nil {
+	if err := database.Client.Model(&model.Admin{}).Count(&count).Error; err != nil {
 		return InternalServerData(c, err.Error())
 	}
 
@@ -36,12 +36,12 @@ func GetUser(c *fiber.Ctx) error {
 	return SuccessPage(c, list, int64(total), int64(page))
 }
 
-func FindUser(c *fiber.Ctx) error {
-	var data model.User
+func FindAdmin(c *fiber.Ctx) error {
+	var data model.Admin
 
 	dataID := c.Params("id", "")
 
-	if row := database.Client.Model(&model.User{}).
+	if row := database.Client.Model(&model.Admin{}).
 		Where("id = ?", dataID).
 		First(&data).RowsAffected; row == 0 {
 		return NotFound(c)
@@ -50,9 +50,9 @@ func FindUser(c *fiber.Ctx) error {
 	return SuccessData(c, data)
 }
 
-func CreateUser(c *fiber.Ctx) error {
-	var form form.User
-	var data model.User
+func CreateAdmin(c *fiber.Ctx) error {
+	var form form.Admin
+	var data model.Admin
 
 	if err := c.BodyParser(&form); err != nil {
 		return BadRequestData(c, err.Error())
@@ -73,12 +73,12 @@ func CreateUser(c *fiber.Ctx) error {
 	return Success(c)
 }
 
-func UpdateUser(c *fiber.Ctx) error {
-	var form form.UserUpdate
-	var data model.User
+func UpdateAdmin(c *fiber.Ctx) error {
+	var form form.AdminUpdate
+	var data model.Admin
 	dataID := c.Params("id")
 
-	if row := database.Client.Model(&model.User{}).
+	if row := database.Client.Model(&model.Admin{}).
 		Where("id = ?", dataID).
 		First(&data).RowsAffected; row == 0 {
 		return NotFound(c)
@@ -99,19 +99,15 @@ func UpdateUser(c *fiber.Ctx) error {
 	return Success(c)
 }
 
-func DeleteUser(c *fiber.Ctx) error {
-	var data model.User
+func DeleteAdmin(c *fiber.Ctx) error {
+	var data model.Admin
 
 	dataID := c.Params("id", "")
 
-	if row := database.Client.Model(&model.User{}).
+	if row := database.Client.Model(&model.Admin{}).
 		Where("id = ?", dataID).
 		First(&data).RowsAffected; row == 0 {
 		return NotFound(c)
-	}
-
-	if err := database.Client.Model(&data).Association("Devices").Clear(); err != nil {
-		return InternalServerData(c, err.Error())
 	}
 
 	if err := database.Client.Model(&data).

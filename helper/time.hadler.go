@@ -1,13 +1,46 @@
 package helper
 
 import (
+	"errors"
 	"strconv"
 	"time"
 )
 
+func SingleTimeHandler(dateType string) []time.Time {
+	var data []time.Time
+	now := time.Now()
+	curYear, curMonth, curDay := now.Date()
+	curHour, curMinute, curSecond := now.Clock()
+	currentLocation := now.Location()
+
+	switch dateType {
+	case "second":
+		data = append(data, time.Date(curYear, curMonth, curDay, curHour, curMinute, (curSecond), 0, currentLocation))
+		data = append(data, data[0].Add(time.Millisecond*999))
+	case "minute":
+		data = append(data, time.Date(curYear, curMonth, curDay, curHour, (curMinute), 0, 0, currentLocation))
+		data = append(data, data[0].Add(time.Second*59))
+	case "hour":
+		data = append(data, time.Date(curYear, curMonth, curDay, (curHour), 0, 0, 0, currentLocation))
+		data = append(data, data[0].Add(time.Minute*59))
+	case "day":
+		data = append(data, time.Date(curYear, curMonth, (curDay), 0, 0, 0, 0, currentLocation))
+		data = append(data, data[0].Add(time.Hour*24))
+	case "month":
+		data = append(data, time.Date(curYear, curMonth, 1, 0, 0, 0, 0, currentLocation).AddDate(0, 0, 0))
+		data = append(data, data[0].AddDate(0, 1, -1))
+	case "year":
+		data = append(data, time.Date((curYear), 1, 1, 0, 0, 0, 0, currentLocation))
+		data = append(data, data[0].AddDate(1, 0, -1))
+	}
+
+	return data
+
+}
+
 func TimeHandler(dateType string) []time.Time {
 	var data []time.Time
-	var reverse []time.Time
+	// var reverse []time.Time
 	now := time.Now()
 	curYear, curMonth, curDay := now.Date()
 	curHour, curMinute, curSecond := now.Clock()
@@ -32,11 +65,7 @@ func TimeHandler(dateType string) []time.Time {
 		data = append(data, currentDate)
 	}
 
-	for i := len(data); i > 0; i-- {
-		reverse = append(reverse, data[i])
-	}
-
-	return reverse
+	return data
 }
 
 func RangeTimeHandler(date []time.Time, dateType string) []time.Time {
@@ -44,11 +73,11 @@ func RangeTimeHandler(date []time.Time, dateType string) []time.Time {
 	for _, v := range date {
 		switch dateType {
 		case "second":
-			rangeTime = append(rangeTime, v.Add(time.Second))
+			rangeTime = append(rangeTime, v.Add(time.Millisecond*999))
 		case "minute":
-			rangeTime = append(rangeTime, v.Add(time.Minute))
+			rangeTime = append(rangeTime, v.Add(time.Second*59))
 		case "hour":
-			rangeTime = append(rangeTime, v.Add(time.Hour))
+			rangeTime = append(rangeTime, v.Add(time.Minute*59))
 		case "day":
 			rangeTime = append(rangeTime, v.Add(time.Hour*24))
 		case "month":
@@ -83,4 +112,23 @@ func LabelHandler(date []time.Time, dateType string) []string {
 	}
 	return label
 
+}
+
+func DateTypeValidate(dateType string) error {
+	switch dateType {
+	case "second":
+		return nil
+	case "minute":
+		return nil
+	case "hour":
+		return nil
+	case "day":
+		return nil
+	case "month":
+		return nil
+	case "year":
+		return nil
+	default:
+		return errors.New("invalid date type")
+	}
 }

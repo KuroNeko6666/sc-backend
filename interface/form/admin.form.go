@@ -7,3 +7,8 @@ type Admin struct {
 	Password string `json:"password" form:"password"`
 	Role     string `json:"role" form:"role"`
 }
+
+type AdminUpdate struct {
+	Name string `json:"name" form:"name"`
+	Role string `json:"role" form:"role"`
+}

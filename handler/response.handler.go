@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/KuroNeko6666/sc-backend/config"
 	"github.com/KuroNeko6666/sc-backend/interface/response"
@@ -59,11 +58,11 @@ func InternalServerData(c *fiber.Ctx, data string) error {
 
 func UnAuthorized(c *fiber.Ctx) error {
 	status := http.StatusUnauthorized
-	cookie := new(fiber.Cookie)
-	cookie.Name = "token"
-	cookie.Value = ""
-	cookie.Expires = time.Now().Add(-1 * time.Hour)
-	c.Cookie(cookie)
+	// cookie := new(fiber.Cookie)
+	// cookie.Name = "token"
+	// cookie.Value = ""
+	// cookie.Expires = time.Now().Add(-1 * time.Hour)
+	// c.Cookie(cookie)
 	return c.Status(status).JSON(response.Base{
 		Message: config.ResFailure,
 		Data:    http.StatusText(status),
@@ -72,11 +71,11 @@ func UnAuthorized(c *fiber.Ctx) error {
 
 func UnAuthorizedData(c *fiber.Ctx, data string) error {
 	status := http.StatusUnauthorized
-	cookie := new(fiber.Cookie)
-	cookie.Name = "token"
-	cookie.Value = ""
-	cookie.Expires = time.Now().Add(-1 * time.Hour)
-	c.Cookie(cookie)
+	// cookie := new(fiber.Cookie)
+	// cookie.Name = "token"
+	// cookie.Value = ""
+	// cookie.Expires = time.Now().Add(-1 * time.Hour)
+	// c.Cookie(cookie)
 	return c.Status(status).JSON(response.Base{
 		Message: config.ResFailure,
 		Data:    data,
