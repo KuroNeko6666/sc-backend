@@ -1,7 +1,7 @@
 package config
 
 const (
-	ServerHost = "localhost"
+	ServerHost = "0.0.0.0"
 	ServerPort = ":8000"
 
 	ResFailure = "failure"
