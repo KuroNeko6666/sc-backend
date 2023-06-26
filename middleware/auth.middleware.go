@@ -19,7 +19,12 @@ func AuthUser(c *fiber.Ctx) error {
 	token = c.Cookies("token", "")
 
 	if token == "" {
-		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+		data := strings.Split(c.GetReqHeaders()["Authorization"], " ")
+		if len(data) == 0 {
+			handler.UnAuthorized(c)
+		}
+
+		token = data[1]
 	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
@@ -41,7 +46,12 @@ func AuthAdmin(c *fiber.Ctx) error {
 	token = c.Cookies("token", "")
 
 	if token == "" {
-		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+		data := strings.Split(c.GetReqHeaders()["Authorization"], " ")
+		if len(data) == 0 {
+			handler.UnAuthorized(c)
+		}
+
+		token = data[1]
 	}
 
 	if err := helper.GetAdminFromToken(token, config.SecretKeyApp, &admin); err != nil {
