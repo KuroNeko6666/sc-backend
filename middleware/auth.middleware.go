@@ -20,7 +20,7 @@ func AuthUser(c *fiber.Ctx) error {
 
 	if token == "" {
 		data := strings.Split(c.GetReqHeaders()["Authorization"], " ")
-		if len(data) == 0 {
+		if len(data) <= 1 {
 			handler.UnAuthorized(c)
 		}
 
@@ -47,7 +47,7 @@ func AuthAdmin(c *fiber.Ctx) error {
 
 	if token == "" {
 		data := strings.Split(c.GetReqHeaders()["Authorization"], " ")
-		if len(data) == 0 {
+		if len(data) <= 1 {
 			handler.UnAuthorized(c)
 		}
 
