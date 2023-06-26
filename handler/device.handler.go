@@ -2,6 +2,7 @@ package handler
 
 import (
 	"math"
+	"strings"
 
 	"github.com/KuroNeko6666/sc-backend/config"
 	"github.com/KuroNeko6666/sc-backend/database"
@@ -152,8 +153,13 @@ func GetDeviceFromUser(c *fiber.Ctx) error {
 	var data []response.DevicesMarket
 
 	var user model.User
+	var token string
 
-	token := c.Cookies("token", "")
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return UnAuthorized(c)
@@ -204,7 +210,13 @@ func GetDeviceForMarket(c *fiber.Ctx) error {
 
 	var user model.User
 
-	token := c.Cookies("token", "")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return UnAuthorized(c)

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"math"
+	"strings"
 
 	"github.com/KuroNeko6666/sc-backend/config"
 	"github.com/KuroNeko6666/sc-backend/database"
@@ -17,7 +18,13 @@ func AddDeviceToCart(c *fiber.Ctx) error {
 	var user model.User
 	var device model.Device
 	deviceID := c.Params("id", "")
-	token := c.Cookies("token")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return BadRequestData(c, err.Error())
@@ -54,7 +61,13 @@ func RemoveDeviceFromCart(c *fiber.Ctx) error {
 	var user model.User
 	var device model.Device
 	deviceID := c.Params("id", "")
-	token := c.Cookies("token")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return BadRequestData(c, err.Error())
@@ -84,7 +97,13 @@ func CartToOrder(c *fiber.Ctx) error {
 	var order model.Order
 	var user model.User
 
-	token := c.Cookies("token")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return BadRequestData(c, err.Error())
 	}
@@ -116,7 +135,13 @@ func GetCartListFromUser(c *fiber.Ctx) error {
 	var count int64
 	var user model.User
 
-	token := c.Cookies("token")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 	limit := c.QueryInt("limit", 10)
 	page := c.QueryInt("page", 1)
 	search := helper.SearchString(c.Query("search", ""))
@@ -201,7 +226,13 @@ func GetOrderListFromUSer(c *fiber.Ctx) error {
 	var count int64
 	var user model.User
 
-	token := c.Cookies("token")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 	limit := c.QueryInt("limit", 10)
 	page := c.QueryInt("page", 1)
 	search := helper.SearchString(c.Query("search", ""))

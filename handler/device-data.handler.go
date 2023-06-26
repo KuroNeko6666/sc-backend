@@ -2,6 +2,7 @@ package handler
 
 import (
 	"math"
+	"strings"
 
 	"github.com/KuroNeko6666/sc-backend/config"
 	"github.com/KuroNeko6666/sc-backend/database"
@@ -66,7 +67,13 @@ func FindDeviceDataFromUser(c *fiber.Ctx) error {
 	offset := (page * limit) - limit
 
 	deviceID := c.Params("id", "")
-	token := c.Cookies("token", "")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return UnAuthorized(c)

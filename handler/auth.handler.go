@@ -8,6 +8,7 @@ import (
 	"github.com/KuroNeko6666/sc-backend/helper"
 	"github.com/KuroNeko6666/sc-backend/interface/form"
 	"github.com/KuroNeko6666/sc-backend/interface/model"
+	"github.com/KuroNeko6666/sc-backend/interface/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinzhu/copier"
 )
@@ -41,7 +42,10 @@ func LoginUser(c *fiber.Ctx) error {
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	c.Cookie(cookie)
 
-	return SuccessData(c, user)
+	return SuccessData(c, response.Login{
+		Token: token,
+		User:  user,
+	})
 }
 
 func LoginAdmin(c *fiber.Ctx) error {
@@ -73,7 +77,10 @@ func LoginAdmin(c *fiber.Ctx) error {
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	c.Cookie(cookie)
 
-	return SuccessData(c, admin)
+	return SuccessData(c, response.Login{
+		Token: token,
+		User:  admin,
+	})
 }
 
 func RegisterUser(c *fiber.Ctx) error {

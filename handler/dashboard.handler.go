@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strings"
+
 	"github.com/KuroNeko6666/sc-backend/config"
 	"github.com/KuroNeko6666/sc-backend/database"
 	"github.com/KuroNeko6666/sc-backend/helper"
@@ -12,7 +14,13 @@ import (
 func DahsboardTotal(c *fiber.Ctx) error {
 	var user model.User
 
-	token := c.Cookies("token", "")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 	if err := helper.GetUserFromToken(token, config.SecretKeyApp, &user); err != nil {
 		return InternalServerData(c, err.Error())
 	}
@@ -28,7 +36,13 @@ func ChartDeviceDataCreated(c *fiber.Ctx) error {
 	var response response.Chart
 	deviceID := c.Params("id", "")
 	dateType := c.Query("date_type", "day")
-	token := c.Cookies("token", "")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.DateTypeValidate(dateType); err != nil {
 		return BadRequestData(c, err.Error())
@@ -105,7 +119,13 @@ func ChartDeviceSpeed(c *fiber.Ctx) error {
 	var response response.Chart
 	deviceID := c.Params("id", "")
 	dateType := c.Query("date_type", "day")
-	token := c.Cookies("token", "")
+	var token string
+
+	token = c.Cookies("token", "")
+
+	if token == "" {
+		token = strings.Split(c.GetReqHeaders()["Authorization"], " ")[1]
+	}
 
 	if err := helper.DateTypeValidate(dateType); err != nil {
 		return BadRequestData(c, err.Error())
